@@ -9,7 +9,7 @@ class Question {
     this.id = 0,
     this.question = '',
     this.systemComment = '',
-    this.options = const [],
+    this.options = const ['1', '2', '3', '4'],
   });
 
   Question.fromJson(Map<String, dynamic> json)
@@ -20,7 +20,7 @@ class Question {
           (json['options'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
-          [];
+          ['1', '2', '3', '4'];
   Map<String, dynamic> toJson() {
     return {'id': id, 'question': question, 'options': options};
   }

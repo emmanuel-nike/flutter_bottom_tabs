@@ -1,4 +1,6 @@
 import 'package:flutter_bottom_tabs/src/config/themes.dart';
+import 'package:flutter_bottom_tabs/src/controllers/providers/auth_provider.dart';
+import 'package:flutter_bottom_tabs/src/controllers/providers/questions_provider.dart';
 import 'package:flutter_bottom_tabs/src/screens/components/common/question_option.dart';
 import 'package:flutter_bottom_tabs/src/screens/components/icons/chevron_down.dart';
 import 'package:flutter_bottom_tabs/src/screens/components/icons/mic_icon.dart';
@@ -6,7 +8,6 @@ import 'package:flutter_bottom_tabs/src/screens/components/icons/time_icon.dart'
 import 'package:flutter_bottom_tabs/src/screens/components/icons/user_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   static String tag = '/HomeScreen';
@@ -18,23 +19,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
-  bool reachedTheEnd = false;
-  bool atTheBottom = false;
-  bool atTheTop = true;
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-  final RefreshController _refreshController = RefreshController(
-    initialRefresh: false,
-  );
-
-  final _questionData = {
-    "question": "What is your favorite time of the day?",
-    "options": [
-      "The peace in the early mornings",
-      "The magical golden hours",
-      "Wind-down time after dinners",
-      "The serenity past midnight",
-    ],
-  };
 
   int? selectedIndex;
 
@@ -95,6 +80,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     //final newsFeeds = ref.watch(newsFeedProvider);
+    final user = ref.watch(authUserProvider);
+    final question = ref.watch(questionProvider);
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
@@ -219,7 +206,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               children: [
                                 SizedBox(height: 50),
                                 Text(
-                                  "Angelina, 28",
+                                  "${user.name}, ${user.age}",
                                   style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
@@ -228,7 +215,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                                 SizedBox(height: 5),
                                 Flexible(
                                   child: Text(
-                                    "What is your favorite time of the day?",
+                                    question.question ?? "Loading question...",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
@@ -253,7 +240,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 Center(
                   child: Text(
-                    "\"Mine is definitely the peace in the morning.\"",
+                    question.systemComment,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -271,7 +258,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           Expanded(
                             child: QuestionOption(
-                              text: _questionData.options[0],
+                              text: question.options.length > 3
+                                  ? question.options[0]
+                                  : "Option 1",
                               index: 0,
                               isSelected: selectedIndex == 0,
                               onPress: () => _onSelectOption(0),
@@ -279,7 +268,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           Expanded(
                             child: QuestionOption(
-                              text: _questionData.options[1],
+                              text: question.options.length > 3
+                                  ? question.options[1]
+                                  : "Option 2",
                               index: 1,
                               isSelected: selectedIndex == 1,
                               onPress: () => _onSelectOption(1),
@@ -292,7 +283,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           Expanded(
                             child: QuestionOption(
-                              text: _questionData.options[2],
+                              text: question.options.length > 3
+                                  ? question.options[2]
+                                  : "Option 3",
                               index: 2,
                               isSelected: selectedIndex == 2,
                               onPress: () => _onSelectOption(2),
@@ -300,7 +293,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                           Expanded(
                             child: QuestionOption(
-                              text: _questionData["options"]?[3],
+                              text: question.options.length > 3
+                                  ? question.options[2]
+                                  : "Option 4",
                               index: 3,
                               isSelected: selectedIndex == 3,
                               onPress: () => _onSelectOption(3),

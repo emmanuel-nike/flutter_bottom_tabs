@@ -1,6 +1,10 @@
 # flutter_bottom_tabs
 
-A new Flutter project.
+A Flutter project showing bottom tabs.
+
+## Preview
+
+![Preview](https://github.com/emmanuel-nike/flutter_bottom_tabs/blob/main/simulator_screenshot_60A089B9-5906-43F9-AA9A-83C0F89989A6.png)
 
 ## Getting Started
 
