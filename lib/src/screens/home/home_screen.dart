@@ -1,4 +1,3 @@
-import 'package:flutter_bottom_tabs/src/config/themes.dart';
 import 'package:flutter_bottom_tabs/src/controllers/providers/auth_provider.dart';
 import 'package:flutter_bottom_tabs/src/controllers/providers/questions_provider.dart';
 import 'package:flutter_bottom_tabs/src/screens/components/common/question_option.dart';
@@ -26,18 +25,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    init();
   }
 
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
-  }
-
-  init() async {
-    //_scrollController.addListener(_handleScrolling);
-    //await Future.delayed(Duration(seconds: 10));
-    //ref.read(newsFeedNotifierProvider.notifier).pretenSaveNewsFeed();
   }
 
   void _onSelectOption(int index) {
@@ -47,41 +39,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
-  void _onRefresh() async {
-    // monitor network fetch
-  }
-
-  void _onLoading() async {
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // await ref.read(newsFeedNotifierProvider.notifier).getNewsFeeds();
-    // final nfProvider = ref.read(newsFeedNotifierProvider);
-    // if (nfProvider is NewsFeedErrorState) {
-    //   _refreshController.loadFailed();
-    // } else if (nfProvider is NewsFeedState && nfProvider.hasMoreData) {
-    //   _refreshController.loadComplete();
-    // } else {
-    //   _refreshController.loadNoData();
-    // }
-  }
-
-  void _handleScrolling() {
-    // if (isEnd &&
-    //     !(ref.watch(newsFeedNotifierProvider) as NewsFeedState).isLoading) {
-    //   _onLoading();
-    //   print("getting bottom feeds");
-    // }
-    // if (isTop &&
-    //     !(ref.watch(newsFeedNotifierProvider) as NewsFeedState).isLoading) {
-    //   ref.watch(newsFeedNotifierProvider.notifier).getNewsFeeds(reset: true);
-    //   print("getting top feeds");
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
-    //final newsFeeds = ref.watch(newsFeedProvider);
     final user = ref.watch(authUserProvider);
     final question = ref.watch(questionProvider);
+
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
@@ -102,70 +64,68 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   Expanded(
                     flex: 4,
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "Stroll Bonfire",
-                                    style: TextStyle(
-                                      color: Color(0xFFCCC8FF),
-                                      fontSize: 34,
-                                      fontWeight: FontWeight.w700,
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 20.0, // shadow blur
-                                          color: Colors.black45, // shadow color
-                                          offset: Offset(
-                                            1.0,
-                                            1.0,
-                                          ), // how much shadow will be shown
-                                        ),
-                                      ],
-                                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Stroll Bonfire",
+                                  style: TextStyle(
+                                    color: Color(0xFFCCC8FF),
+                                    fontSize: 34,
+                                    fontWeight: FontWeight.w700,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 20.0, // shadow blur
+                                        color: Colors.black45, // shadow color
+                                        offset: Offset(
+                                          1.0,
+                                          1.0,
+                                        ), // how much shadow will be shown
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(width: 10),
-                                  InkWell(
-                                    onTap: () {
-                                      // Handle profile icon tap
-                                      print("Profile icon tapped");
-                                    },
-                                    child: ChevronDownIcon(),
+                                ),
+                                SizedBox(width: 10),
+                                InkWell(
+                                  onTap: () {
+                                    // Handle profile icon tap
+                                    print("Profile icon tapped");
+                                  },
+                                  child: ChevronDownIcon(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                TimeIcon(),
+                                SizedBox(width: 10),
+                                Text(
+                                  "22h 00m",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  TimeIcon(),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    "22h 00m",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                ),
+                                SizedBox(width: 10),
+                                UserIcon(),
+                                Text(
+                                  "103",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  SizedBox(width: 10),
-                                  UserIcon(),
-                                  Text(
-                                    "103",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
@@ -206,7 +166,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               children: [
                                 SizedBox(height: 50),
                                 Text(
-                                  "${user.name}, ${user.age}",
+                                  user.id == 0 || user.age == 0
+                                      ? "Loading user..."
+                                      : "${user.name}, ${user.age}",
                                   style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
